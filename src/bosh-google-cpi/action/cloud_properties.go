@@ -29,10 +29,11 @@ type SnapshotMetadata struct {
 }
 
 type StemcellCloudProperties struct {
-	Name           string `json:"name,omitempty"`
-	Version        string `json:"version,omitempty"`
-	Infrastructure string `json:"infrastructure,omitempty"`
-	SourceURL      string `json:"source_url,omitempty"`
+	Name           string   `json:"name,omitempty"`
+	Version        string   `json:"version,omitempty"`
+	Infrastructure string   `json:"infrastructure,omitempty"`
+	Licences       []string `json:"licences,omitempty"`
+	SourceURL      string   `json:"source_url,omitempty"`
 
 	// URL of an existing image (Image.SelfLink)
 	ImageURL   string `json:"image_url,omitempty"`

@@ -27,7 +27,7 @@ type FakeImageService struct {
 	FindErr    error
 }
 
-func (i *FakeImageService) CreateFromURL(sourceURL string, sourceSha1 string, description string) (string, error) {
+func (i *FakeImageService) CreateFromURL(sourceURL string, sourceSha1 string, description string, licences []string) (string, error) {
 	i.CreateFromURLCalled = true
 	i.CreateFromURLSourceURL = sourceURL
 	i.CreateFromURLSourceSha1 = sourceSha1
@@ -35,7 +35,7 @@ func (i *FakeImageService) CreateFromURL(sourceURL string, sourceSha1 string, de
 	return i.CreateFromURLID, i.CreateFromURLErr
 }
 
-func (i *FakeImageService) CreateFromTarball(imagePath string, description string) (string, error) {
+func (i *FakeImageService) CreateFromTarball(imagePath string, description string, licences []string) (string, error) {
 	i.CreateFromTarballCalled = true
 	i.CreateFromTarballImagePath = imagePath
 	i.CreateFromTarballDescription = description

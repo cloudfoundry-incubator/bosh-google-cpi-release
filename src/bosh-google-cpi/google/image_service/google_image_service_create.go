@@ -16,14 +16,14 @@ func (i GoogleImageService) cleanUp(id string) {
 	}
 }
 
-func (i GoogleImageService) CreateFromURL(sourceURL string, sourceSha1 string, description string) (string, error) {
+func (i GoogleImageService) CreateFromURL(sourceURL string, sourceSha1 string, description string, licences []string) (string, error) {
 	uuidStr, err := i.uuidGen.Generate()
 	if err != nil {
 		return "", bosherr.WrapErrorf(err, "Generating random Google Image name")
 	}
 
 	imageName := fmt.Sprintf("%s-%s", googleImageNamePrefix, uuidStr)
-	image, err := i.create(imageName, description, sourceURL, sourceSha1)
+	image, err := i.create(imageName, description, sourceURL, sourceSha1, licences)
 	if err != nil {
 		return "", bosherr.WrapErrorf(err, "Creating Google Image from URL")
 	}
@@ -31,7 +31,7 @@ func (i GoogleImageService) CreateFromURL(sourceURL string, sourceSha1 string, d
 	return image, nil
 }
 
-func (i GoogleImageService) CreateFromTarball(imagePath string, description string) (string, error) {
+func (i GoogleImageService) CreateFromTarball(imagePath string, description string, licences []string) (string, error) {
 	uuidStr, err := i.uuidGen.Generate()
 	if err != nil {
 		return "", bosherr.WrapErrorf(err, "Generating random Google Image name")
@@ -80,7 +80,7 @@ func (i GoogleImageService) CreateFromTarball(imagePath string, description stri
 	defer i.deleteObject(imageName, objectName)
 
 	// Create the image
-	image, err := i.create(imageName, description, imageObject.MediaLink, "")
+	image, err := i.create(imageName, description, imageObject.MediaLink, "", licences)
 	if err != nil {
 		return "", bosherr.WrapErrorf(err, "Creating Google Image from Tarball")
 	}
@@ -88,7 +88,7 @@ func (i GoogleImageService) CreateFromTarball(imagePath string, description stri
 	return image, nil
 }
 
-func (i GoogleImageService) create(name string, description string, sourceURL string, sourceSha1 string) (string, error) {
+func (i GoogleImageService) create(name string, description string, sourceURL string, sourceSha1 string, licences []string) (string, error) {
 	if description == "" {
 		description = googleImageDescription
 	}
@@ -102,6 +102,7 @@ func (i GoogleImageService) create(name string, description string, sourceURL st
 		Name:        name,
 		Description: description,
 		RawDisk:     rawdisk,
+		Licenses:    licences,
 	}
 
 	i.logger.Debug(googleImageServiceLogTag, "Creating Google Image with params: %#v", image)
